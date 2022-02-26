@@ -1,20 +1,9 @@
 import courseData from './config/courseData.json'
+import College from './services/college';
+import Courses from './services/courses';
+import FormHandler from './ui/form_handler';
 import { getRandomCourse } from './utils/randomCourse';
-const COURSES_PARENT_ID = "courses"
-const N_COURSES = 100;
-
-class CoursesList {
-    constructor(idParent) {
-        this.parentElem = document.getElementById(idParent);
-    }
-    render() {
-        this.parentElem.innerHTML = `${getList()}`;
-    }
-}
-
-function getList() {
-    return creatCourses().map(item => `<li>${JSON.stringify(item)}</li>`).join('');
-}
+const N_COURSES = 5;
 
 function creatCourses() {
     const courses = [];
@@ -23,7 +12,21 @@ function creatCourses() {
     }
     return courses;
 }
+function getList(courses) {
+    return courses.map(item => `<li>${JSON.stringify(item).replaceAll(",", ", ")}</li>`).join('');
+}
 
-
-const courses = new CoursesList(COURSES_PARENT_ID);
-courses.render();
+const parentElem = document.getElementById("courses");
+const courses = creatCourses();
+parentElem.innerHTML = `${getList(courses)}`;
+const dataProvider = new Courses(courseData.minId, courseData.maxId, courses);
+const dataProcessor = new College(dataProvider, courseData);
+const formHandler = new FormHandler("courses-form","alert");
+formHandler.addHandler(course => {
+    const message = dataProcessor.addCourse(course);
+    if (typeof message != 'string') {
+        parentElem.innerHTML += `<li>${JSON.stringify(course).replaceAll(",", ", ")}</li>`        
+    } else {
+        return message;
+    }    
+})
