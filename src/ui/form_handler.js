@@ -15,13 +15,33 @@ export default class FormHandler {
                 return obj;
             }, {})
             const message = fnProcessor(data);
-            if (!message) {
-                this.#formElement.requestFullscreen();
-                this.#alertElement.firstChild.remove();
+            if (typeof message === 'string') {
+                this.#alertElement.innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!<br></strong>${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
+            } else if(typeof message === 'object'){
+                this.#formElement.reset();
+                this.#alertElement.innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>The course has been successfully added!<br></strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
             } else {
-                this.#alertElement.innerHTML = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                ${message}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
+                this.#formElement.reset();
+                removeMessage();
             }
         });
     }
+    fillOptions(idOptions, options) {
+        document.getElementById(idOptions).innerHTML += `${getOptions(options)}`;
+    }
+    show() {
+        this.#formElement.hidden = false;
+    }
+    hide() {
+        this.#formElement.hidden = true;
+    }
+    removeMessage() {
+        this.#alertElement.innerHTML = '';
+    }
+}
+function getOptions(options) {
+    return options.map(o => `<option value="${o}">${o}</option>`).join('');
 }

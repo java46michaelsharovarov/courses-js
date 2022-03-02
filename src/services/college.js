@@ -18,23 +18,20 @@ export default class College {
     }
     #getValidationMessage(course) {
         let message = "";
-        const {courses, lecturers, minCost, maxCost, minHours, maxHours, minYear, maxYear} = this.#courseData;
-        const {name, lecturer, hours, cost, openingDate} = course;
-        if(!(courses.reduce((res,item) => res || item.toUpperCase() == name.toUpperCase(), false))){
-            message += "Name should be in the list; ";
-        }
-        if(!(lecturers.includes(lecturer))){
-            message += "Lecturer should be in the list; ";
-        }
+        const {minCost, maxCost, minHours, maxHours, minYear, maxYear} = this.#courseData;
+        const {hours, cost, openingDate} = course;
         if(hours < minHours || hours > maxHours){
-            message += "Hours should be in the range [80-500]; ";
+            message += `Hours should be in the range [${minHours}-${maxHours}] <br> `;
         }
         if(cost < minCost || cost > maxCost){
-            message += "Cost should be in the range [5000-30000]; ";
+            message += `Cost should be in the range [${minCost}-${maxCost}] <br> `;
         }
         if(openingDate < new Date(minYear, 0, 1) || openingDate > new Date(maxYear, 11, 31)){
-            message += "Year should be in the range [2000-2022]; ";
+            message += `Year should be in the range [${minYear}-${maxYear}] <br> `;
         }
         return message;
+    }
+    getAllCourses() {
+        return this.#courses.get();
     }
 } 

@@ -22,6 +22,9 @@ export default class Courses {
         return id;
     }
     exist(id) {
-        return this.#courses.reduce((res,item) => item.id == id || res, false);        
+        return !!this.#courses.find(i => i.id === id);        
+    }
+    get() {
+        return this.#courses;
     }
 }
