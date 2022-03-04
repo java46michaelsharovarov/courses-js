@@ -4,6 +4,7 @@ import Courses from './services/courses';
 import FormHandler from './ui/form_handler';
 import TableHandler from './ui/table_handler';
 import { getRandomCourse } from './utils/randomCourse';
+import _ from 'lodash';
 const N_COURSES = 5;
 
 function creatCourses() {
@@ -24,7 +25,17 @@ const tableHandler = new TableHandler([
     {key : 'cost', displayName : 'Cost (ILS)'},
     {key : 'hours', displayName : 'Course Duration (h)'},
     {key : 'openingDate', displayName : 'Open Date'}
-], "courses-table");
+], "courses-table", "tableName", _, "sortCourses");
+const hoursStatisticsTable = new TableHandler([
+    {key : 'minInterval', displayName : 'From'},
+    {key : 'maxInterval', displayName : 'To'},
+    {key : 'amount', displayName : 'Amount'}
+], "courses-table", "tableName", "Hours Statistics");
+const costStatisticsTable = new TableHandler([
+    {key : 'minInterval', displayName : 'From'},
+    {key : 'maxInterval', displayName : 'To'},
+    {key : 'amount', displayName : 'Amount'}
+], "courses-table", "tableName", "Cost Statistics");
 const formHandler = new FormHandler("courses-form","alert");
 formHandler.addHandler(course => {
     const res = dataProcessor.addCourse(course);
@@ -32,6 +43,9 @@ formHandler.addHandler(course => {
 })
 formHandler.fillOptions("name-options", courseData.courses);
 formHandler.fillOptions("lecturer-options", courseData.lecturers);
+window.sortCourses = (key) => {
+    tableHandler.showTable(dataProcessor.sortCourses(key));
+}
 window.showForm = () => {
     formHandler.show();
     tableHandler.hideTable();
@@ -40,4 +54,16 @@ window.showCourses = () => {
     formHandler.removeMessage();
     formHandler.hide();
     tableHandler.showTable(dataProcessor.getAllCourses());
+}
+window.showHoursStatistics = () => {
+    formHandler.removeMessage();
+    formHandler.hide();
+    hoursStatisticsTable.showTable(dataProcessor.getHoursStatistics(courseData.hoursLengthInterval));
+
+}
+window.showCostStatistics = () => {
+    formHandler.removeMessage();
+    formHandler.hide();
+    costStatisticsTable.showTable(dataProcessor.getCostStatistics(courseData.costLengthInterval));
+    
 }
