@@ -16,12 +16,12 @@ export default class FormHandler {
             }, {})
             const message = fnProcessor(data);
             if (typeof message === 'string') {
-                this.#alertElement.innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                this.#alertElement.innerHTML = `<div class="m-0 alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Error!<br></strong>${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
             } else if(typeof message === 'object'){
                 this.#formElement.reset();
-                this.#alertElement.innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                this.#alertElement.innerHTML = `<div class="m-0 alert alert-success alert-dismissible fade show" role="alert">
                 <strong>The course has been successfully added!<br></strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
             } else {
                 this.#formElement.reset();

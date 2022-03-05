@@ -39,12 +39,12 @@ export default class College {
     sortCourses(key) {
         return _.sortBy(this.getAllCourses(), key);
     }
-    getHoursStatistics(lengthInterval) {
-        return this.getStatistics('hours', lengthInterval);
-    }
-    getCostStatistics(lengthInterval) {
-        return this.getStatistics('cost', lengthInterval);
-    }
+    // getHoursStatistics(lengthInterval) {
+    //     return this.getStatistics('hours', lengthInterval);
+    // }
+    // getCostStatistics(lengthInterval) {
+    //     return this.getStatistics('cost', lengthInterval);
+    // }
     getStatistics(key, interval) {
         const res =_.countBy(this.getAllCourses(), (course) => Math.floor(course[key]/interval));
         return Object.entries(res).map(e => ({minInterval : e[0]*interval, 
