@@ -19,12 +19,13 @@
 </head>
 <body>    
     <div class="container"> 
-        <div class="row justify-content-center mt-2">
-            <button id="" onclick="showForm()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Add Course</button> 
-            <button id="" onclick="showCourses()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Show Courses</button>
-            <button id="" onclick="showHoursStatistics()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Hours Statistics</button> 
-            <button id="" onclick="showCostStatistics()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Cost Statistics</button>
-        </div>
+        <nav class="row justify-content-center mt-2">
+            <button id="buttonForm" onclick="showForm()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Add Course</button> 
+            <button id="buttonCourses" onclick="showCourses()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Show Courses</button>
+            <button id="buttonHoursStatistics" onclick="showHoursStatistics()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Hours Statistics</button> 
+            <button id="buttonCostStatistics" onclick="showCostStatistics()" class="col-5 col-sm-2 btn btn-secondary py-1 m-1">Cost Statistics</button>
+            <button id="buttonFormGeneration" onclick="showFormGeneration()" class="col-6 col-sm-3 col-lg-2 btn btn-secondary py-1 m-1">Generating courses</button> 
+        </nav>
         <div class="row justify-content-center">
             <div id="alert" class="col-sm-8 col-lg-4"></div>
         </div>
@@ -61,6 +62,18 @@
                     <button type="submit" class="col-4 btn btn-outline-primary">Submit</button>
                     <button type="reset" class="col-4 btn btn-outline-secondary">Reset</button>
                 </div>
+        </form>
+        <form id="generation-courses-form" hidden>       
+            <div class="row justify-content-center mt-5">
+                <div class="col-sm-4 mt-5 mt-sm-3 mt-lg-5">
+                    <label for="" class="form-label">Courses</label>
+                    <input class="form-control mt-1 mt-sm-0" type="number" name="courses" required>
+                </div>
+            </div>
+            <div class="row justify-content-around mt-5">
+                <button type="submit" class="col-4 btn btn-outline-primary">Submit</button>
+                <button type="reset" class="col-4 btn btn-outline-secondary">Reset</button>
+            </div>
         </form>
         <div>
             <h3 id="tableName" class="text-center mt-3 mt-lg-5"></h3>

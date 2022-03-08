@@ -1,17 +1,17 @@
 import { getRandomNumber } from "../utils/random";
 
 export default class Courses {
-    #courses
+    #coursesArray
     #minId
     #maxId
     constructor(minId, maxId, courses) {
-        this.#courses = courses ?? [];
+        this.#coursesArray = courses ?? [];
         this.#minId = minId ?? 1;
         this.#maxId = maxId ?? 1000000;
     }
     add(course) {
         course.id = this.#getId();
-        this.#courses.push(course);
+        this.#coursesArray.push(course);
         return course;
     }
     #getId() {
@@ -22,9 +22,15 @@ export default class Courses {
         return id;
     }
     exist(id) {
-        return !!this.#courses.find(i => i.id === id);        
+        return !!this.#coursesArray.find(i => i.id === id);        
     }
     get() {
-        return this.#courses;
+        return this.#coursesArray;
+    }
+    remove(id) {
+        const index = this.#coursesArray.findIndex(c => c.id === id);
+        const res = this.#coursesArray[index];
+        this.#coursesArray.splice(index, 1);
+        return res;
     }
 }

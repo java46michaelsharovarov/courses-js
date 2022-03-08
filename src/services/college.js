@@ -2,9 +2,9 @@ import _ from "lodash";
 
 export default class College {
     #courseData
-    #courses
+    #coursesDataProvider
     constructor(courses, courseData) {
-        this.#courses = courses;
+        this.#coursesDataProvider = courses;
         this.#courseData = courseData;
     }
     addCourse(course) {
@@ -14,7 +14,7 @@ export default class College {
         const validationMessage = this.#getValidationMessage(course);        
         course.openingDate = course.openingDate.toDateString()
         if(!validationMessage) {
-           return this.#courses.add(course);
+           return this.#coursesDataProvider.add(course);
         } 
         return validationMessage;
     }
@@ -34,22 +34,22 @@ export default class College {
         return message;
     }
     getAllCourses() {
-        return this.#courses.get();
+        return this.#coursesDataProvider.get();
     }
     sortCourses(key) {
         return _.sortBy(this.getAllCourses(), key);
     }
-    // getHoursStatistics(lengthInterval) {
-    //     return this.getStatistics('hours', lengthInterval);
-    // }
-    // getCostStatistics(lengthInterval) {
-    //     return this.getStatistics('cost', lengthInterval);
-    // }
     getStatistics(key, interval) {
         const res =_.countBy(this.getAllCourses(), (course) => Math.floor(course[key]/interval));
         return Object.entries(res).map(e => ({minInterval : e[0]*interval, 
             maxInterval : (e[0]*interval)+(interval-1),
             amount : e[1]}));
+    }
+    removeCourse(id) {
+        if (!this.#coursesDataProvider.exist(id)) {
+            throw `course with id ${id} not found`;
+        }
+        return this.#coursesDataProvider.remove(id);
     }
     
 } 
