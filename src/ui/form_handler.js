@@ -8,13 +8,13 @@ export default class FormHandler {
         this.#inputElements = document.querySelectorAll(`#${idForm} [name]`);
     }
     addHandler(fnProcessor) {
-        this.#formElement.addEventListener('submit', event => {
+        this.#formElement.addEventListener('submit', async event => {
             event.preventDefault();
             const data = Array.from(this.#inputElements).reduce((obj, element) => {
                 obj[element.name] = element.value;
                 return obj;
             }, {})
-            const message = fnProcessor(data);
+            const message = await fnProcessor(data);
             if (typeof message === 'string') {
                 this.#alertElement.innerHTML = `<div class="m-0 alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Error!<br></strong>${message}

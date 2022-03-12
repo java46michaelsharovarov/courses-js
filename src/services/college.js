@@ -7,14 +7,14 @@ export default class College {
         this.#coursesDataProvider = courses;
         this.#courseData = courseData;
     }
-    addCourse(course) {
+    async addCourse(course) {
         course.cost = +course.cost;
         course.hours = +course.hours;
         course.openingDate = new Date(course.openingDate);
         const validationMessage = this.#getValidationMessage(course);        
         course.openingDate = course.openingDate.toDateString()
         if(!validationMessage) {
-           return this.#coursesDataProvider.add(course);
+           return await this.#coursesDataProvider.add(course);
         } 
         return validationMessage;
     }
@@ -33,14 +33,14 @@ export default class College {
         }
         return message;
     }
-    getAllCourses() {
-        return this.#coursesDataProvider.get();
+    async getAllCourses() {
+        return await this.#coursesDataProvider.get();
     }
-    sortCourses(key) {
-        return _.sortBy(this.getAllCourses(), key);
+    async sortCourses(key) {
+        return _.sortBy(await this.getAllCourses(), key);
     }
-    getStatistics(key, interval) {
-        const res =_.countBy(this.getAllCourses(), (course) => Math.floor(course[key]/interval));
+    async getStatistics(key, interval) {
+        const res =_.countBy(await this.getAllCourses(), (course) => Math.floor(course[key]/interval));
         return Object.entries(res).map(e => ({minInterval : e[0]*interval, 
             maxInterval : (e[0]*interval)+(interval-1),
             amount : e[1]}));

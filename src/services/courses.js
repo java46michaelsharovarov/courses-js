@@ -1,5 +1,11 @@
 import { getRandomNumber } from "../utils/random";
-
+function getPromise(timeout, value) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(value);
+        }, timeout);
+    })
+}
 export default class Courses {
     #coursesArray
     #minId
@@ -12,7 +18,7 @@ export default class Courses {
     add(course) {
         course.id = this.#getId();
         this.#coursesArray.push(course);
-        return course;
+        return getPromise(1000, course);
     }
     #getId() {
         let id;
@@ -25,12 +31,12 @@ export default class Courses {
         return !!this.#coursesArray.find(i => i.id === id);        
     }
     get() {
-        return this.#coursesArray;
+        return getPromise(2000, this.#coursesArray);
     }
     remove(id) {
         const index = this.#coursesArray.findIndex(c => c.id === id);
         const res = this.#coursesArray[index];
         this.#coursesArray.splice(index, 1);
-        return res;
+        return getPromise(1000, res);
     }
 }
