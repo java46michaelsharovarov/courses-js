@@ -12,7 +12,7 @@ export default class College {
         course.hours = +course.hours;
         course.openingDate = new Date(course.openingDate);
         const validationMessage = this.#getValidationMessage(course);        
-        course.openingDate = course.openingDate.toDateString()
+        course.openingDate = course.openingDate.toISOString().slice(0,10);
         if(!validationMessage) {
            return await this.#coursesDataProvider.add(course);
         } 
@@ -45,11 +45,11 @@ export default class College {
             maxInterval : (e[0]*interval)+(interval-1),
             amount : e[1]}));
     }
-    removeCourse(id) {
-        if (!this.#coursesDataProvider.exist(id)) {
+    async removeCourse(id) {
+        if (!await this.#coursesDataProvider.exist(id)) {
             throw `course with id ${id} not found`;
         }
-        return this.#coursesDataProvider.remove(id);
+        return await this.#coursesDataProvider.remove(id);
     }
     
 } 

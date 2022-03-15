@@ -1,24 +1,14 @@
 import courseData from './config/courseData.json'
 import College from './services/college';
-import Courses from './services/courses';
+import { dataProvider } from './config/services-config';
 import FormHandler from './ui/form_handler';
 import TableHandler from './ui/table_handler';
 import { getRandomCourse } from './utils/randomCourse';
-import _ from 'lodash';
+import _, { reject } from 'lodash';
 import NavigatorButtons from './ui/navigators-buttons';
 import Spinner from './ui/spinner';
-const N_COURSES = 5;
+import Alert from './ui/alert';
 
-function creatCourses() {
-    const courses = [];
-    for (let i = 0; i < N_COURSES; i++) {
-        courses.push(getRandomCourse(courseData));
-    }
-    return courses;
-}
-
-const courses = creatCourses();
-const dataProvider = new Courses(courseData.minId, courseData.maxId, courses);
 const dataProcessor = new College(dataProvider, courseData);
 const tableHandler = new TableHandler([
     {key : 'id', displayName : 'ID'},
@@ -39,6 +29,7 @@ const formHandler = new FormHandler("courses-form","alert");
 const formGenerationHandler = new FormHandler("generation-courses-form","alert");
 const navButtons = new NavigatorButtons();
 const spinner = new Spinner("spinner");
+const alertMessage = new Alert("alert");
 formHandler.addHandler(async course => {
     const res = await handlerWithSpinner(dataProcessor.addCourse, course);
         return res;    
@@ -50,17 +41,23 @@ formGenerationHandler.addHandler(async obj => {
     let res = 'The value must be greater than zero!';
     if(inputValue > 0) {
         for (let i = 0; i < inputValue; i++) {
-           await handlerWithSpinner(dataProcessor.addCourse, getRandomCourse(courseData));
+           res = await handlerWithSpinner(dataProcessor.addCourse, getRandomCourse(courseData));
         } 
-        res = obj;
     }    
     return res;
 })
 async function handlerWithSpinner(fun, ...args) {
+    let res;
+    formHandler.removeMessage();
     spinner.start();
-    const res = await fun.bind(dataProcessor, ...args)();
-    spinner.stop(); 
-    return res;   
+    try {
+        res = await fun.bind(dataProcessor, ...args)();
+    } catch (err) {
+        alertMessage.showAlert(`${dataProvider.getUrl()}`);
+        res = reject(new Error("Error"));
+    }  
+    spinner.stop();    
+    return res;  
 }
 window.hide = () => {
     formHandler.removeMessage();

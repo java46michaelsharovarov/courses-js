@@ -28,7 +28,7 @@ export default class Courses {
         return id;
     }
     exist(id) {
-        return !!this.#coursesArray.find(i => i.id === id);        
+        return getPromise(100, !!this.#coursesArray.find(i => i.id === id));        
     }
     get() {
         return getPromise(2000, this.#coursesArray);
