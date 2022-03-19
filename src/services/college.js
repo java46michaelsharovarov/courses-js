@@ -11,8 +11,7 @@ export default class College {
         course.cost = +course.cost;
         course.hours = +course.hours;
         course.openingDate = new Date(course.openingDate);
-        const validationMessage = this.#getValidationMessage(course);        
-        course.openingDate = course.openingDate.toISOString().slice(0,10);
+        const validationMessage = this.#getValidationMessage(course);
         if(!validationMessage) {
            return await this.#coursesDataProvider.add(course);
         } 

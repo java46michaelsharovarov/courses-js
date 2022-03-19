@@ -14,19 +14,8 @@ export default class FormHandler {
                 obj[element.name] = element.value;
                 return obj;
             }, {})
-            const message = await fnProcessor(data);
-            if (typeof message === 'string') {
-                this.#alertElement.innerHTML = `<div class="m-0 alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error!<br></strong>${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
-            } else if(typeof message === 'object'){
-                this.#formElement.reset();
-                this.#alertElement.innerHTML = `<div class="m-0 text-center alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Successfully added!<br></strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`;
-            } else {
-                this.#formElement.reset();
-                removeMessage();
-            }
+            const res = await fnProcessor(data);
+            typeof res === 'string' || this.#formElement.reset();
         });
     }
     fillOptions(idOptions, options) {
@@ -37,9 +26,6 @@ export default class FormHandler {
     }
     hide() {
         this.#formElement.hidden = true;
-    }
-    removeMessage() {
-        this.#alertElement.innerHTML = '';
     }
 }
 function getOptions(options) {

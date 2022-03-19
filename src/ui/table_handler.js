@@ -1,15 +1,13 @@
 export default class TableHandler {
     #tableName
-    #tableNameElem 
     #tableElem
     #columnsDefinition
     #sortFnName
     #removeFnName
-    constructor(columnsDefinition, idTable, idTableName, tableName, sortFnName, removeFnName) {
+    constructor(columnsDefinition, idTable, tableName, sortFnName, removeFnName) {
         this.#tableName = tableName ?? '';
         this.#columnsDefinition = columnsDefinition;
         this.#tableElem = document.getElementById(idTable);
-        this.#tableNameElem = document.getElementById(idTableName);
         this.#sortFnName = sortFnName ?? '';
         this.#removeFnName = removeFnName ?? '';
         if (!this.#tableElem) {
@@ -17,22 +15,27 @@ export default class TableHandler {
         }
     }
     showTable(objects) {
-        this.#tableNameElem.innerHTML = `${this.#tableName}`;
-        this.#tableElem.innerHTML = `${this.#getHeader()}${this.#getBody(objects)}`;
+        this.#tableElem.innerHTML = `${this.#getHeader()}${this.#getBody(objects)}${this.#getTableName()}`;
     }
     hideTable() {
-        this.#tableNameElem.innerHTML = '';
         this.#tableElem.innerHTML = '';
+    }
+    #getTableName() {
+        return `<caption class="h3 text-dark caption-top border-0 text-center mt-3">${this.#tableName}</caption>`
     }
     #getHeader() {
         return `<thead><tr>${this.#getColumns()}</tr></thead>`;
     }
     #getColumns() {
-        const columns = this.#columnsDefinition.map(c => `<th onclick="${this.#getSortFn(c)}" style="cursor : pointer">${c.displayName}</th>`);
+        const columns = this.#columnsDefinition.map(c => `<th onclick="${this.#getSortFn(c)}" style="cursor: pointer; vertical-align: middle;">${c.displayName}</th>`);
         if (this.#removeFnName) {
             columns.push("<th></th>");
         }
-        return columns.join('');
+        let res = columns.join('');   
+        if (!this.#sortFnName) {
+            res = res.replaceAll('cursor: pointer;', '');
+        }
+        return res;
     }
     #getSortFn(columnsDefinition) {
         return this.#sortFnName ? `${(this.#sortFnName)}('${columnsDefinition.key}');`: '';
